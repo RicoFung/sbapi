@@ -18,8 +18,9 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 import com.atomikos.icatch.jta.UserTransactionImp;
 import com.atomikos.icatch.jta.UserTransactionManager;
 
-@Configuration
-@EnableTransactionManagement
+// 打开注释，开启分布式事务
+//@Configuration
+//@EnableTransactionManagement
 //@PropertySource(value = "classpath:config/transactions.properties", ignoreResourceNotFound = true)
 public class TransactionConfig
 {

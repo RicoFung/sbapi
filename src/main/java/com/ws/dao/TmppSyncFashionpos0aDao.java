@@ -11,7 +11,7 @@ import chok.devwork.springboot.BaseDao;
 @Repository
 public class TmppSyncFashionpos0aDao extends BaseDao<TmppSyncFashionpos0a,Long>
 {
-	@Resource(name = "firstSqlSessionTemplate")
+	@Resource
 	private SqlSession sqlSession;
 
 	@Override

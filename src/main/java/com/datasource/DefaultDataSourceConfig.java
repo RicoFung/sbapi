@@ -14,44 +14,42 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
-import com.alibaba.druid.pool.xa.DruidXADataSource;
-import com.atomikos.jdbc.AtomikosDataSourceBean;
+import com.alibaba.druid.pool.DruidDataSource;
 
-//@Configuration
-//@PropertySource(value = "classpath:datasource.properties", ignoreResourceNotFound = true)
-public class FirstDataSourceConfig 
+@Configuration
+@PropertySource(value = "classpath:datasource.properties", ignoreResourceNotFound = true)
+public class DefaultDataSourceConfig 
 {
-    @Value("${first.datasource.unique-resource-name}")
-    private String uniqueResourceName;
-    @Value("${first.datasource.url}")
+    @Value("${default.datasource.url}")
     private String url;
-    @Value("${first.datasource.username}")
+    @Value("${default.datasource.username}")
     private String user;
-    @Value("${first.datasource.password}")
+    @Value("${default.datasource.password}")
     private String password;
-    @Value("${first.datasource.driver-class-name}")
+    @Value("${default.datasource.driver-class-name}")
     private String driverClass;
-    @Value("${first.datasource.filters}")
+    @Value("${default.datasource.filters}")
     private String filters;
-    @Value("${first.datasource.initialSize}")
+    @Value("${default.datasource.initialSize}")
     private int initialSize;
-    @Value("${first.datasource.maxActive}")
+    @Value("${default.datasource.maxActive}")
     private int maxActive;
-    @Value("${first.datasource.minIdle}")
+    @Value("${default.datasource.minIdle}")
     private int minIdle;
-    @Value("${first.datasource.maxWait}")
+    @Value("${default.datasource.maxWait}")
     private int maxWait;
-    @Value("${first.datasource.mapper-location}")
+    @Value("${default.datasource.mapper-location}")
     private String mapperLocation;
     @Value("${mybatis.config-location}")
     private String mybatisConfigLocation;
  
-    @Bean(name = "firstDataSource")
+    @Bean(name = "defaultDataSource")
     @Primary
-    public DataSource firstDataSource() throws SQLException 
+    public DataSource defaultDataSource() throws SQLException 
     {
-        DruidXADataSource dataSource = new DruidXADataSource();
+        DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(driverClass);
         dataSource.setUrl(url);
         dataSource.setUsername(user);
@@ -62,35 +60,31 @@ public class FirstDataSourceConfig
         dataSource.setMaxActive(maxActive);
         dataSource.setMinIdle(minIdle);
         dataSource.setMaxWait(maxWait);
-        
-        AtomikosDataSourceBean adsBean = new AtomikosDataSourceBean();
-        adsBean.setXaDataSource(dataSource);
-        adsBean.setUniqueResourceName(uniqueResourceName);
-        return adsBean;
+        return dataSource;
     }
 
 //	  打开后，分布式事务JTA失效
-//    @Bean(name = "firstTransactionManager")
-//    @Primary
-//    public DataSourceTransactionManager firstTransactionManager() 
-//    {
-//        return new DataSourceTransactionManager(firstDataSource());
-//    }
- 
-    @Bean(name = "firstSqlSessionFactory")
+    @Bean(name = "defaultTransactionManager")
     @Primary
-    public SqlSessionFactory firstSqlSessionFactory(@Qualifier("firstDataSource") DataSource firstDataSource) throws Exception 
+    public DataSourceTransactionManager defaultTransactionManager() throws SQLException 
+    {
+        return new DataSourceTransactionManager(defaultDataSource());
+    }
+ 
+    @Bean(name = "defaultSqlSessionFactory")
+    @Primary
+    public SqlSessionFactory defaultSqlSessionFactory(@Qualifier("defaultDataSource") DataSource defaultDataSource) throws Exception 
     {
         final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-        sessionFactory.setDataSource(firstDataSource);
+        sessionFactory.setDataSource(defaultDataSource);
         sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(mapperLocation));
         sessionFactory.setConfigLocation(new DefaultResourceLoader().getResource(mybatisConfigLocation));
         return sessionFactory.getObject();
     }
 
-	@Bean(name = "firstSqlSessionTemplate")
+	@Bean(name = "defaultSqlSessionTemplate")
 	@Primary
-	public SqlSessionTemplate firstSqlSessionTemplate(@Qualifier("firstSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception 
+	public SqlSessionTemplate defaultSqlSessionTemplate(@Qualifier("defaultSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception 
 	{
 		return new SqlSessionTemplate(sqlSessionFactory);
 	}
