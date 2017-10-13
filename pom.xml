@@ -22,21 +22,8 @@
 	<dependencies>
 		<!-- spring-boot WEB支持-->
 		<dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId></dependency>
-		<!-- spring-boot cxf 
-		-->
+		<!-- spring-boot cxf -->
 		<dependency><groupId>org.apache.cxf</groupId><artifactId>cxf-spring-boot-starter-jaxws</artifactId><version>${cxf.version}</version></dependency>
-		<!-- Apache CXF 
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-frontend-jaxws</artifactId>
-			<version>${cxf.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-transports-http</artifactId>
-			<version>${cxf.version}</version>
-		</dependency>
-		-->
 		<!-- spring-boot 热部署 -->
 		<dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-devtools</artifactId></dependency>
 		<!-- spring-boot 打包时，把内嵌的tomcat排除掉 -->
@@ -52,14 +39,6 @@
 		<!-- spring-boot atomikos 分布式事务 -->
 		<dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-jta-atomikos</artifactId></dependency>
 	    <dependency><groupId>com.atomikos</groupId><artifactId>transactions-osgi</artifactId><version>3.9.3</version></dependency>
-		<!-- 
-		<dependency><groupId>javax.transaction</groupId><artifactId>javax.transaction-api</artifactId><version>1.2</version></dependency>
-	    <dependency><groupId>com.atomikos</groupId><artifactId>transactions-jdbc</artifactId><version>4.0.4</version></dependency>
-	    <dependency><groupId>com.atomikos</groupId><artifactId>transactions-jms</artifactId><version>4.0.4</version></dependency>
-	    <dependency><groupId>com.atomikos</groupId><artifactId>transactions-jta</artifactId><version>4.0.4</version></dependency>
-	    <dependency><groupId>com.atomikos</groupId><artifactId>transactions-api</artifactId><version>4.0.4</version></dependency>
-	    <dependency><groupId>com.atomikos</groupId><artifactId>transactions-osgi</artifactId><version>4.0.4</version></dependency>
-	     -->
 		<!-- db driver myql-->
 		<dependency><groupId>mysql</groupId><artifactId>mysql-connector-java</artifactId></dependency>
 		<!-- db driver oracle-->

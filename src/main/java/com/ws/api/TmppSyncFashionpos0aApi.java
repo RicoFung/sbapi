@@ -1,6 +1,5 @@
 package com.ws.api;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +8,6 @@ import javax.jws.WebService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.common.Factory;
@@ -22,8 +19,6 @@ public class TmppSyncFashionpos0aApi extends SpringBeanAutowiringSupport impleme
 {
 	static Logger log = LoggerFactory.getLogger("sbApi");
 
-//	@Autowired
-//	private TmppSyncFashionpos0aService service;
 	private TmppSyncFashionpos0aService service = Factory.getTmppSyncFashionpos0aService();
 
 	@Override
@@ -53,7 +48,7 @@ public class TmppSyncFashionpos0aApi extends SpringBeanAutowiringSupport impleme
 			service.addBatch(poList);
 			result.put("success", ""+true);
 		}
-		catch (IOException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			result.put("success", ""+false);

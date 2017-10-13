@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         metadata-complete="false" version="3.0">
+	
+	<security-constraint>
+		<web-resource-collection>
+			<http-method>GET</http-method>
+			<web-resource-name>tomcat protect page</web-resource-name>
+			<!-- /protect目录下的所有资源是受保护的 -->
+			<url-pattern>/ws/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<!-- 这里的member要与tomcat-user.xml中配置的role一致 -->
+			<role-name>epoApiRole</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<login-config>
+		<!-- 验证方式，可选的值为： "BASIC", "DIGEST", "FORM", "CLIENT-CERT" -->
+		<auth-method>BASIC</auth-method>
+		<!-- 使用的Realm名字，注意这里不能有空格 -->
+		<realm-name>MyConstraints</realm-name>
+	</login-config>
+	<security-role>
+		<role-name>epoApiRole</role-name>
+	</security-role>
+</web-app>

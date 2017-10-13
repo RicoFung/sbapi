@@ -1,11 +1,9 @@
 package com.ws.service;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.ws.dao.TmppSyncFashionpos0aDao;
 import com.ws.entity.TmppSyncFashionpos0a;
@@ -25,8 +23,7 @@ public class TmppSyncFashionpos0aService extends BaseService<TmppSyncFashionpos0
 		return dao;
 	}
 	
-//	@Transactional
-	public void addBatch(List<TmppSyncFashionpos0a> poList) throws IOException
+	public void addBatch(List<TmppSyncFashionpos0a> poList) throws Exception
 	{
 		for(TmppSyncFashionpos0a po : poList)
 		{

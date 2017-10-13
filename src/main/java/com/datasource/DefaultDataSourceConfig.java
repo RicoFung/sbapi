@@ -1,11 +1,14 @@
 package com.datasource;
+
 import java.sql.SQLException;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,10 +18,13 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import com.alibaba.druid.pool.DruidDataSource;
 
 @Configuration
+@EnableTransactionManagement
 @PropertySource(value = "classpath:datasource.properties", ignoreResourceNotFound = true)
 public class DefaultDataSourceConfig 
 {
@@ -62,14 +68,6 @@ public class DefaultDataSourceConfig
         dataSource.setMaxWait(maxWait);
         return dataSource;
     }
-
-//	  打开后，分布式事务JTA失效
-    @Bean(name = "defaultTransactionManager")
-    @Primary
-    public DataSourceTransactionManager defaultTransactionManager() throws SQLException 
-    {
-        return new DataSourceTransactionManager(defaultDataSource());
-    }
  
     @Bean(name = "defaultSqlSessionFactory")
     @Primary
@@ -87,5 +85,39 @@ public class DefaultDataSourceConfig
 	public SqlSessionTemplate defaultSqlSessionTemplate(@Qualifier("defaultSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception 
 	{
 		return new SqlSessionTemplate(sqlSessionFactory);
+	}
+	
+	@Bean(name = "defaultTransactionManager")
+	@Primary
+	public DataSourceTransactionManager defaultTransactionManager(@Qualifier("defaultDataSource") DataSource defaultDataSource) throws SQLException 
+	{
+		return new DataSourceTransactionManager(defaultDataSource);
+	}
+	
+	@Bean(name = "transactionInterceptor")
+	@Primary
+	public TransactionInterceptor transactionInterceptor(@Qualifier("defaultTransactionManager") DataSourceTransactionManager defaultTransactionManager) throws Throwable
+	{
+		Properties prop = new Properties();
+		prop.setProperty("add*", "PROPAGATION_REQUIRED,-Exception");
+		prop.setProperty("del*", "PROPAGATION_REQUIRED,-Exception");
+		prop.setProperty("upd*", "PROPAGATION_REQUIRED,-Exception");
+		prop.setProperty("get*", "PROPAGATION_NEVER,readOnly");
+		prop.setProperty("query*", "PROPAGATION_NEVER,readOnly");
+		TransactionInterceptor ti = new TransactionInterceptor();
+		ti.setTransactionManager(defaultTransactionManager);
+		ti.setTransactionAttributes(prop);
+		return ti;
+	}
+
+	@Bean(name = "beanNameAutoProxyCreator")
+	@Primary
+	public BeanNameAutoProxyCreator beanNameAutoProxyCreator() throws Throwable
+	{
+		BeanNameAutoProxyCreator bpc = new BeanNameAutoProxyCreator();
+		bpc.setProxyTargetClass(true);
+		bpc.setBeanNames("*Service");
+		bpc.setInterceptorNames("transactionInterceptor");
+		return bpc;
 	}
 }
