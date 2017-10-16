@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -52,7 +51,6 @@ public class DefaultDataSourceConfig
     private String mybatisConfigLocation;
  
     @Bean(name = "defaultDataSource")
-    @Primary
     public DataSource defaultDataSource() throws SQLException 
     {
         DruidDataSource dataSource = new DruidDataSource();
@@ -70,7 +68,6 @@ public class DefaultDataSourceConfig
     }
  
     @Bean(name = "defaultSqlSessionFactory")
-    @Primary
     public SqlSessionFactory defaultSqlSessionFactory(@Qualifier("defaultDataSource") DataSource defaultDataSource) throws Exception 
     {
         final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
@@ -81,21 +78,18 @@ public class DefaultDataSourceConfig
     }
 
 	@Bean(name = "defaultSqlSessionTemplate")
-	@Primary
 	public SqlSessionTemplate defaultSqlSessionTemplate(@Qualifier("defaultSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception 
 	{
 		return new SqlSessionTemplate(sqlSessionFactory);
 	}
 	
 	@Bean(name = "defaultTransactionManager")
-	@Primary
 	public DataSourceTransactionManager defaultTransactionManager(@Qualifier("defaultDataSource") DataSource defaultDataSource) throws SQLException 
 	{
 		return new DataSourceTransactionManager(defaultDataSource);
 	}
 	
 	@Bean(name = "transactionInterceptor")
-	@Primary
 	public TransactionInterceptor transactionInterceptor(@Qualifier("defaultTransactionManager") DataSourceTransactionManager defaultTransactionManager) throws Throwable
 	{
 		Properties prop = new Properties();
@@ -111,7 +105,6 @@ public class DefaultDataSourceConfig
 	}
 
 	@Bean(name = "beanNameAutoProxyCreator")
-	@Primary
 	public BeanNameAutoProxyCreator beanNameAutoProxyCreator() throws Throwable
 	{
 		BeanNameAutoProxyCreator bpc = new BeanNameAutoProxyCreator();
