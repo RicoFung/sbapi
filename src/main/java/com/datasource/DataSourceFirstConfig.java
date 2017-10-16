@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -20,36 +21,36 @@ import com.atomikos.jdbc.AtomikosDataSourceBean;
 
 //@Configuration
 //@PropertySource(value = "classpath:datasource.properties", ignoreResourceNotFound = true)
-public class FirstDataSourceConfig 
+public class DataSourceFirstConfig 
 {
-    @Value("${first.datasource.unique-resource-name}")
+    @Value("${datasource.first.unique-resource-name}")
     private String uniqueResourceName;
-    @Value("${first.datasource.url}")
+    @Value("${datasource.first.url}")
     private String url;
-    @Value("${first.datasource.username}")
+    @Value("${datasource.first.username}")
     private String user;
-    @Value("${first.datasource.password}")
+    @Value("${datasource.first.password}")
     private String password;
-    @Value("${first.datasource.driver-class-name}")
+    @Value("${datasource.first.driver-class-name}")
     private String driverClass;
-    @Value("${first.datasource.filters}")
+    @Value("${datasource.first.filters}")
     private String filters;
-    @Value("${first.datasource.initialSize}")
+    @Value("${datasource.first.initialSize}")
     private int initialSize;
-    @Value("${first.datasource.maxActive}")
+    @Value("${datasource.first.maxActive}")
     private int maxActive;
-    @Value("${first.datasource.minIdle}")
+    @Value("${datasource.first.minIdle}")
     private int minIdle;
-    @Value("${first.datasource.maxWait}")
+    @Value("${datasource.first.maxWait}")
     private int maxWait;
-    @Value("${first.datasource.mapper-location}")
+    @Value("${datasource.first.mapper-location}")
     private String mapperLocation;
     @Value("${mybatis.config-location}")
     private String mybatisConfigLocation;
  
-    @Bean(name = "firstDataSource")
+    @Bean(name = "dataSourceFirst")
     @Primary
-    public DataSource firstDataSource() throws SQLException 
+    public DataSource dataSourceFirst() throws SQLException 
     {
         DruidXADataSource dataSource = new DruidXADataSource();
         dataSource.setDriverClassName(driverClass);
@@ -70,28 +71,31 @@ public class FirstDataSourceConfig
     }
 
 //	  打开后，分布式事务JTA失效
-//    @Bean(name = "firstTransactionManager")
+//    @Bean(name = "transactionManagerFirst")
+//    @DependsOn({ "dataSourceFirst" })
 //    @Primary
-//    public DataSourceTransactionManager firstTransactionManager() 
+//    public DataSourceTransactionManager transactionManagerFirst() 
 //    {
-//        return new DataSourceTransactionManager(firstDataSource());
+//        return new DataSourceTransactionManager(dataSourceFirst());
 //    }
  
-    @Bean(name = "firstSqlSessionFactory")
+    @Bean(name = "sqlSessionFactoryFirst")
+    @DependsOn({ "dataSourceFirst" })
     @Primary
-    public SqlSessionFactory firstSqlSessionFactory(@Qualifier("firstDataSource") DataSource firstDataSource) throws Exception 
+    public SqlSessionFactory sqlSessionFactoryFirst() throws Exception 
     {
         final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-        sessionFactory.setDataSource(firstDataSource);
+        sessionFactory.setDataSource(dataSourceFirst());
         sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(mapperLocation));
         sessionFactory.setConfigLocation(new DefaultResourceLoader().getResource(mybatisConfigLocation));
         return sessionFactory.getObject();
     }
 
-	@Bean(name = "firstSqlSessionTemplate")
+	@Bean(name = "sqlSessionTemplateFirst")
+    @DependsOn({ "sqlSessionFactoryFirst" })
 	@Primary
-	public SqlSessionTemplate firstSqlSessionTemplate(@Qualifier("firstSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception 
+	public SqlSessionTemplate sqlSessionTemplateFirst() throws Exception 
 	{
-		return new SqlSessionTemplate(sqlSessionFactory);
+		return new SqlSessionTemplate(sqlSessionFactoryFirst());
 	}
 }

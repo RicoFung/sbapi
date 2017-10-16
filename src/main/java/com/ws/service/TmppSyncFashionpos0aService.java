@@ -29,5 +29,6 @@ public class TmppSyncFashionpos0aService extends BaseService<TmppSyncFashionpos0
 		{
 			dao.add(po);
 		}
+		throw new Exception("test");
 	}
 }

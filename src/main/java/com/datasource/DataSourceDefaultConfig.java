@@ -9,10 +9,10 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -25,33 +25,33 @@ import com.alibaba.druid.pool.DruidDataSource;
 @Configuration
 @EnableTransactionManagement
 @PropertySource(value = "classpath:datasource.properties", ignoreResourceNotFound = true)
-public class DefaultDataSourceConfig 
+public class DataSourceDefaultConfig 
 {
-    @Value("${default.datasource.url}")
+    @Value("${datasource.default.url}")
     private String url;
-    @Value("${default.datasource.username}")
+    @Value("${datasource.default.username}")
     private String user;
-    @Value("${default.datasource.password}")
+    @Value("${datasource.default.password}")
     private String password;
-    @Value("${default.datasource.driver-class-name}")
+    @Value("${datasource.default.driver-class-name}")
     private String driverClass;
-    @Value("${default.datasource.filters}")
+    @Value("${datasource.default.filters}")
     private String filters;
-    @Value("${default.datasource.initialSize}")
+    @Value("${datasource.default.initialSize}")
     private int initialSize;
-    @Value("${default.datasource.maxActive}")
+    @Value("${datasource.default.maxActive}")
     private int maxActive;
-    @Value("${default.datasource.minIdle}")
+    @Value("${datasource.default.minIdle}")
     private int minIdle;
-    @Value("${default.datasource.maxWait}")
+    @Value("${datasource.default.maxWait}")
     private int maxWait;
-    @Value("${default.datasource.mapper-location}")
+    @Value("${datasource.default.mapper-location}")
     private String mapperLocation;
     @Value("${mybatis.config-location}")
     private String mybatisConfigLocation;
  
-    @Bean(name = "defaultDataSource")
-    public DataSource defaultDataSource() throws SQLException 
+    @Bean(name = "dataSource")
+    public DataSource dataSource() throws SQLException 
     {
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(driverClass);
@@ -67,30 +67,34 @@ public class DefaultDataSourceConfig
         return dataSource;
     }
  
-    @Bean(name = "defaultSqlSessionFactory")
-    public SqlSessionFactory defaultSqlSessionFactory(@Qualifier("defaultDataSource") DataSource defaultDataSource) throws Exception 
+    @Bean(name = "sqlSessionFactory")
+    @DependsOn({ "dataSource" })
+    public SqlSessionFactory sqlSessionFactory() throws Exception 
     {
         final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-        sessionFactory.setDataSource(defaultDataSource);
+        sessionFactory.setDataSource(dataSource());
         sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(mapperLocation));
         sessionFactory.setConfigLocation(new DefaultResourceLoader().getResource(mybatisConfigLocation));
         return sessionFactory.getObject();
     }
 
-	@Bean(name = "defaultSqlSessionTemplate")
-	public SqlSessionTemplate defaultSqlSessionTemplate(@Qualifier("defaultSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception 
+	@Bean(name = "sqlSessionTemplate")
+	@DependsOn({ "sqlSessionFactory" })
+	public SqlSessionTemplate sqlSessionTemplate() throws Exception 
 	{
-		return new SqlSessionTemplate(sqlSessionFactory);
+		return new SqlSessionTemplate(sqlSessionFactory());
 	}
 	
-	@Bean(name = "defaultTransactionManager")
-	public DataSourceTransactionManager defaultTransactionManager(@Qualifier("defaultDataSource") DataSource defaultDataSource) throws SQLException 
+	@Bean(name = "transactionManager")
+	@DependsOn({ "dataSource" })
+	public DataSourceTransactionManager transactionManager() throws SQLException 
 	{
-		return new DataSourceTransactionManager(defaultDataSource);
+		return new DataSourceTransactionManager(dataSource());
 	}
 	
 	@Bean(name = "transactionInterceptor")
-	public TransactionInterceptor transactionInterceptor(@Qualifier("defaultTransactionManager") DataSourceTransactionManager defaultTransactionManager) throws Throwable
+	@DependsOn({ "transactionManager" })
+	public TransactionInterceptor transactionInterceptor() throws Throwable
 	{
 		Properties prop = new Properties();
 		prop.setProperty("add*", "PROPAGATION_REQUIRED,-Exception");
@@ -99,7 +103,7 @@ public class DefaultDataSourceConfig
 		prop.setProperty("get*", "PROPAGATION_NEVER,readOnly");
 		prop.setProperty("query*", "PROPAGATION_NEVER,readOnly");
 		TransactionInterceptor ti = new TransactionInterceptor();
-		ti.setTransactionManager(defaultTransactionManager);
+		ti.setTransactionManager(transactionManager());
 		ti.setTransactionAttributes(prop);
 		return ti;
 	}
