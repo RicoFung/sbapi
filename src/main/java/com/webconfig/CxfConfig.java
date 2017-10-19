@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.api.soap.TmppSyncFashionpos0aSoap;
+import com.api.soap.server.TmppSyncFashionpos0aSoap;
 
 @Configuration
 public class CxfConfig

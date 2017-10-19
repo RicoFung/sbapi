@@ -1,4 +1,4 @@
-package com.api.soap;
+package com.api.soap.server;
 
 import java.util.ArrayList;
 import java.util.List;

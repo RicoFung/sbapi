@@ -95,29 +95,23 @@
 			    </configuration>
 			</plugin>
 			<!-- cxf生成客户端代码插件 -->
-			<!-- 
 			<plugin>
 			    <groupId>org.apache.cxf</groupId>
 			    <artifactId>cxf-codegen-plugin</artifactId>
 			    <version>${cxf.version}</version>
 			    <executions>
 			        <execution>
-			        	 	生成第一个客户端代码
 			            <id>generate-sources-client1</id>
 			            <phase>generate-sources</phase>
 			            <configuration>
-			            		生成代理类的目录
 			                <sourceRoot>gencode</sourceRoot>
 			                <encoding>UTF-8</encoding>
 			                <wsdlOptions>
 			                    <wsdlOption>
-			                        wsdl地址
 			                        <wsdl>${basedir}/src/main/java/com/api/soap/client/wsdl/sapws.wsdl</wsdl>
-			                        指定代理类包名
                                     <packagenames>
-                                        <packagename>com.api.soap.client</packagename>
+                                        <packagename>com.api.soap.client.ZFM_IF_SD_DELIVERY_O2O</packagename>
                                     </packagenames>
-                                    是否生成soapheader
                                     <extendedSoapHeaders>true</extendedSoapHeaders>
 			                    </wsdlOption>
 			                </wsdlOptions>
@@ -128,7 +122,6 @@
 			        </execution>
 			    </executions>
 			</plugin>
-			 -->
 		</plugins>
 		<finalName>sbapi</finalName>
 	</build>

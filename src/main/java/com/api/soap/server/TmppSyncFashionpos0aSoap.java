@@ -1,4 +1,4 @@
-package com.api.soap;
+package com.api.soap.server;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +14,7 @@ import com.api.entity.TmppSyncFashionpos0a;
 import com.api.service.TmppSyncFashionpos0aService;
 import com.common.Factory;
 
-@WebService(endpointInterface="com.api.soap.ITmppSyncFashionpos0aSoap", serviceName="TmppSyncFashionpos0aSoap")
+@WebService(endpointInterface="com.api.soap.server.ITmppSyncFashionpos0aSoap", serviceName="TmppSyncFashionpos0aSoap", targetNamespace="http://soap.sbapi/")
 public class TmppSyncFashionpos0aSoap extends SpringBeanAutowiringSupport implements ITmppSyncFashionpos0aSoap
 {
 	static Logger log = LoggerFactory.getLogger("sbApi");

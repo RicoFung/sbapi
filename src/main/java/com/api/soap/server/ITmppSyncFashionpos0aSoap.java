@@ -1,4 +1,4 @@
-package com.api.soap;
+package com.api.soap.server;
 
 import java.util.List;
 import java.util.Map;
