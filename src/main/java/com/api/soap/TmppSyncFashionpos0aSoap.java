@@ -1,4 +1,4 @@
-package com.ws.api;
+package com.api.soap;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,12 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
+import com.api.entity.TmppSyncFashionpos0a;
+import com.api.service.TmppSyncFashionpos0aService;
 import com.common.Factory;
-import com.ws.entity.TmppSyncFashionpos0a;
-import com.ws.service.TmppSyncFashionpos0aService;
 
-@WebService(endpointInterface="com.ws.api.ITmppSyncFashionpos0aApi", serviceName="TmppSyncFashionpos0aApi")
-public class TmppSyncFashionpos0aApi extends SpringBeanAutowiringSupport implements ITmppSyncFashionpos0aApi
+@WebService(endpointInterface="com.api.soap.ITmppSyncFashionpos0aSoap", serviceName="TmppSyncFashionpos0aSoap")
+public class TmppSyncFashionpos0aSoap extends SpringBeanAutowiringSupport implements ITmppSyncFashionpos0aSoap
 {
 	static Logger log = LoggerFactory.getLogger("sbApi");
 

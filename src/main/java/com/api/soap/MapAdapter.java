@@ -1,4 +1,4 @@
-package com.ws.api;
+package com.api.soap;
 
 import java.util.HashMap;
 import java.util.Map;

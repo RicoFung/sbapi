@@ -1,4 +1,4 @@
-package com.ws.api;
+package com.api.soap;
 
 import java.util.List;
 import java.util.Map;
@@ -9,10 +9,10 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.ws.entity.TmppSyncFashionpos0a;
+import com.api.entity.TmppSyncFashionpos0a;
 
 @WebService
-public interface ITmppSyncFashionpos0aApi
+public interface ITmppSyncFashionpos0aSoap
 {
 	/**
 	 * 增

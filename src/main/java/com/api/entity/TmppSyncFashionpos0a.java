@@ -1,4 +1,4 @@
-package com.ws.entity;
+package com.api.entity;
 
 /**
  *

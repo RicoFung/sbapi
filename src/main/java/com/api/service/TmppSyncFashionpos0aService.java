@@ -1,12 +1,12 @@
-package com.ws.service;
+package com.api.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ws.dao.TmppSyncFashionpos0aDao;
-import com.ws.entity.TmppSyncFashionpos0a;
+import com.api.dao.TmppSyncFashionpos0aDao;
+import com.api.entity.TmppSyncFashionpos0a;
 
 import chok.devwork.springboot.BaseDao;
 import chok.devwork.springboot.BaseService;

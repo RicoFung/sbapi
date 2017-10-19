@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">   
 
-<mapper namespace="com.ws.entity.TmppSyncFashionpos0a">
+<mapper namespace="com.api.entity.TmppSyncFashionpos0a">
       <!-- 自动生成id策略 -->
-    <insert id="add" parameterType="com.ws.entity.TmppSyncFashionpos0a" >  
+    <insert id="add" parameterType="com.api.entity.TmppSyncFashionpos0a" >  
        	INSERT INTO TMPP_SYNC_FASHIONPOS_0A 
        	( TC_ROWID, TC_ONE, TC_TWO, TC_THIRD, TC_ADD_USER, TC_ADD_TIME, TC_UPDATE_USER, TC_UPDATE_TIME) 
        	VALUES
        	( SEQ_SYNC_FASHIONPOS_0A.Nextval, #{tcOne}, #{tcTwo}, #{tcThird}, #{tcAddUser}, #{tcAddTime}, #{tcUpdateUser}, #{tcUpdateTime})
     </insert>  
 	
-	<delete id="del" parameterType="com.ws.entity.TmppSyncFashionpos0a">
+	<delete id="del" parameterType="com.api.entity.TmppSyncFashionpos0a">
 		DELETE FROM TMPP_SYNC_FASHIONPOS_0A 
 		 WHERE TC_ROWID = #{tcRowid}  	  
 	</delete>
 	
-	<update id="upd" parameterType="com.ws.entity.TmppSyncFashionpos0a">
+	<update id="upd" parameterType="com.api.entity.TmppSyncFashionpos0a">
 		UPDATE TMPP_SYNC_FASHIONPOS_0A SET
 	           TC_ONE = #{tcOne}, 
 	           TC_TWO = #{tcTwo}, 
@@ -27,7 +27,7 @@
          WHERE TC_ROWID = #{tcRowid}  	        
 	</update>
   	
-	<resultMap type="com.ws.entity.TmppSyncFashionpos0a" id="result">
+	<resultMap type="com.api.entity.TmppSyncFashionpos0a" id="result">
         <result property="tcRowid" column="TC_ROWID"/>
         <result property="tcOne" column="TC_ONE"/>
         <result property="tcTwo" column="TC_TWO"/>

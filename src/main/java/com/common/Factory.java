@@ -1,6 +1,6 @@
 package com.common;
 
-import com.ws.service.TmppSyncFashionpos0aService;
+import com.api.service.TmppSyncFashionpos0aService;
 
 
 public class Factory {

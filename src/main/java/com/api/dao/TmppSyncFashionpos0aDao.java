@@ -1,10 +1,10 @@
-package com.ws.dao;
+package com.api.dao;
 
 import javax.annotation.Resource;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.ws.entity.TmppSyncFashionpos0a;
+import com.api.entity.TmppSyncFashionpos0a;
 
 import chok.devwork.springboot.BaseDao;
 

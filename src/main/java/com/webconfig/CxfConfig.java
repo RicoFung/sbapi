@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.ws.api.TmppSyncFashionpos0aApi;
+import com.api.soap.TmppSyncFashionpos0aSoap;
 
 @Configuration
 public class CxfConfig
@@ -20,7 +20,7 @@ public class CxfConfig
 	@Bean
 	public ServletRegistrationBean cxfServletRegistration()
 	{
-		return new ServletRegistrationBean(new CXFServlet(), "/ws/*");
+		return new ServletRegistrationBean(new CXFServlet(), "/soap/*");
 	}
 	//如果要同时使用spring mvc 和 SOAP两个servlet需要添加以下代码
 	@Bean(name = DispatcherServletAutoConfiguration.DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
@@ -38,8 +38,16 @@ public class CxfConfig
 	@Bean
 	public Endpoint endpoint()
 	{
-		EndpointImpl endpoint = new EndpointImpl(springBus(), new TmppSyncFashionpos0aApi());
+		EndpointImpl endpoint = new EndpointImpl(springBus(), new TmppSyncFashionpos0aSoap());
 		endpoint.publish("/TmppSyncFashionpos0a");
+		return endpoint;
+	}
+	
+	@Bean
+	public Endpoint endpoint1()
+	{
+		EndpointImpl endpoint = new EndpointImpl(springBus(), new TmppSyncFashionpos0aSoap());
+		endpoint.publish("/TmppSyncFashionpos0a1");
 		return endpoint;
 	}
 }
