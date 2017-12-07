@@ -26,7 +26,7 @@ public class DictAction extends BaseController<Object>
 	{
 		Map<String, Object> m = req.getParameterValueMap(false, true);
 		result.put("total", Factory.getTmppSyncFashionpos0aService().getCount(m));
-		result.put("rows", Factory.getTmppSyncFashionpos0aService().query(req.getDynamicSortMap(m)));
+		result.put("rows", Factory.getTmppSyncFashionpos0aService().query(req.getDynamicSortParameterValueMap(m)));
 		printJson(result.getData());
 	}
 
